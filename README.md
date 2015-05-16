@@ -81,3 +81,55 @@ There a re a lot of packages to extend R, when you find one you like install it 
   install.packages("data.table")
   library("data.table")
 ```
+
+## Plotting
+
+### Read and load data
+```
+  education <- read.csv("2009education.csv", header=TRUE, sep=",", as.is=TRUE)
+```
+
+### Order
+Now to get this into a plotting device we can start by ordering our dataset to begin with.
+
+```
+high.order <- order(education$high, decreasing=TRUE)
+education.high <- education[high.order,]
+```
+
+### Plot
+Now choose a plotting system and run any of the corresponding functions.
+```
+plot(education.high$high, type="l")     # Line
+plot(education.high$high, type="h")     # High-density
+plot(education.high$high, type="s")     # Step
+```
+
+If we need to plot more than one variable (most of the time) we can add the data separating it by commas.
+
+```
+plot(education$high, education$bs)
+```
+
+### Results
+
+![r plots](plots.png)
+
+
+### Regression and Lowess
+An excellent characteristic of R is the ease of statistical function use. For example, going back to our scatter plot, we might add a linear regression line and a Lowess line as well.  
+
+First of all lets go back to our scatter plot, then we need to fit it to a linear model through a lm function and finally draw the line. We'll through a Lowess smoother in there which is uses locally-weighted polynomial regression.
+
+```
+# Scatter plot
+plot(education$high, education$bs)
+
+# Linear model and regression line
+abline(lm(education$bs~education$high), col="red")
+
+# Draw a Lowess line
+lines(lowess(education$high, education$bs), col="blue")
+```
+
+![r plots](lr.png)
